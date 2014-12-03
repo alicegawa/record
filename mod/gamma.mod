@@ -62,85 +62,86 @@ BREAKPOINT {
     
     at_time(del)
     at_time(del+dur)
-    VERBATIM
-    int_kappa = (int)KAPPA;
-    frac_kappa = KAPPA - (double)int_kappa;
-    forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
-    x_int = 0;
-    for(roop=0;roop<int_kappa;roop++){
-	x_int += -log(forRand);
-    }
-    if(fabs(frac_kappa)<0.01){ x_frac=0; }
-    else{
-	b = (exp(1.0)+frac_kappa)/exp(1.0);
-	while(1){
-	    forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
-	    p = b*forRand;
-	    forRand2 = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
-	    if(p<=1.0){
-		x_frac = pow(p,1.0/frac_kappa);
-		if(forRand2<=exp(-x_frac)){break;}
-	    }else{
-		x_frac = -log((b-p)/frac_kappa);
-		if(forRand2<=pow(x_frac,frac_kappa-1.0)){
-		    break;
-		}
-	    }
-	}
-    }
-    amp = THETA*(x_frac+x_int);
-   ENDVERBATIM
-  if(amp>i_max){
+  
+  :if(amp>i_max){
       :printf("i_max = %g, amp = %g\n",i_max, amp)
-      i_max = amp
-      VERBATIM
-      /*usleep(1000000);*/
-      ENDVERBATIM
-  }
-  if(i<i_min){
-      i_min = amp
-      VERBATIM
-      /*	    usleep(1);*/
-      ENDVERBATIM
-  }
+   :   i_max = amp
+    :  VERBATIM
+     : /*usleep(1000000);*/
+     : ENDVERBATIM
+ : }
+ : if(i<i_min){
+  :    i_min = amp
+   :   VERBATIM
+      :/*	    usleep(1);*/
+    :  ENDVERBATIM
+ : }
   :printf("amp = %g\n",amp)
-
-    if (t < del + dur && t >= del) {
-	fcount = fcount + 1
-	if(fcount>50){:40){:4){:kokode ijiru!
-	    i = amp:here should be modified
-	    fcount = 0
-	}
-	:printf("i = %g (nA)\n",i)
-	if(i>i_max){
-	    i_max = i
-	    VERBATIM
-	    usleep(1);
-	    ENDVERBATIM
-	}
-	if(i<i_min){
-	    i_min = i
-	    VERBATIM
-	    usleep(1);
-	    ENDVERBATIM
-	}
-	:printf("i_max = %g\t i_min = %g\n",i_max,i_min)
-	
-    }else{
-	i = 0
-    }
-    times = times + 1
-    :ave_v = ave_v + v
-    ave_v = ave_v + amp
-    :printf("current average of voltage is %g\n",ave_v/times)
-    VERBATIM
-    t_int = (int)t;
-    t_frac = t - t_int;
-    t_int = (int)(t_int)%10000;
-    ENDVERBATIM
-    if(!(t_int) || t_frac==0){
-:	printf("average of amplitude is %g \n", ave_v/times)
-:	printf("amp_max = %g\t amp_min = %g\n",i_max,i_min)
-    }
-    
+  
+  if (t < del + dur && t >= del) {
+      fcount = fcount + 1
+      if(fcount>50){:40){:4){:kokode ijiru!
+	  VERBATIM
+	  int_kappa = (int)KAPPA;
+	  frac_kappa = KAPPA - (double)int_kappa;
+	  forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
+	  x_int = 0;
+	  for(roop=0;roop<int_kappa;roop++){
+	      x_int += -log(forRand);
+	  }
+	  if(fabs(frac_kappa)<0.01){ x_frac=0; }
+	  else{
+	      b = (exp(1.0)+frac_kappa)/exp(1.0);
+	      while(1){
+		  forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
+		  p = b*forRand;
+		  forRand2 = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
+		  if(p<=1.0){
+		      x_frac = pow(p,1.0/frac_kappa);
+		      if(forRand2<=exp(-x_frac)){break;}
+		  }else{
+		      x_frac = -log((b-p)/frac_kappa);
+		      if(forRand2<=pow(x_frac,frac_kappa-1.0)){
+			  break;
+		      }
+		  }
+	      }
+	  }
+	  amp = THETA*(x_frac+x_int);
+	  ENDVERBATIM
+	  i = amp:here should be modified
+	  fcount = 0
+      }
+      :printf("i = %g (nA)\n",i)
+      :if(i>i_max){
+:	  i_max = i
+:	  VERBATIM
+:	  usleep(1);
+:	  ENDVERBATIM
+ :     }
+  :    if(i<i_min){
+:	  i_min = i
+:	  VERBATIM
+:	  usleep(1);
+:	  ENDVERBATIM
+ :     }
+      :printf("i_max = %g\t i_min = %g\n",i_max,i_min)
+      
+  }else{
+      i = 0
+  }
+  :times = times + 1
+  :ave_v = ave_v + v
+  :ave_v = ave_v + amp
+  :printf("current average of voltage is %g\n",ave_v/times)
+  :VERBATIM
+  :t_int = (int)t;
+  :t_frac = t - t_int;
+  :t_int = (int)(t_int)%10000;
+  :ENDVERBATIM
+  :if(!(t_int) || t_frac==0){
+      :	printf("average of amplitude is %g \n", ave_v/times)
+      :	printf("amp_max = %g\t amp_min = %g\n",i_max,i_min)
+  :}
+  
 }

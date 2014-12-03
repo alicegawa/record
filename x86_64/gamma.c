@@ -309,76 +309,43 @@ for (_iml = 0; _iml < _cntml; ++_iml) {
 static double _nrn_current(double _v){double _current=0.;v=_v;{ {
    at_time ( nrn_threads, del ) ;
    at_time ( nrn_threads, del + dur ) ;
-   
-/*VERBATIM*/
-    int_kappa = (int)KAPPA;
-    frac_kappa = KAPPA - (double)int_kappa;
-    forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
-    x_int = 0;
-    for(roop=0;roop<int_kappa;roop++){
-	x_int += -log(forRand);
-    }
-    if(fabs(frac_kappa)<0.01){ x_frac=0; }
-    else{
-	b = (exp(1.0)+frac_kappa)/exp(1.0);
-	while(1){
-	    forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
-	    p = b*forRand;
-	    forRand2 = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
-	    if(p<=1.0){
-		x_frac = pow(p,1.0/frac_kappa);
-		if(forRand2<=exp(-x_frac)){break;}
-	    }else{
-		x_frac = -log((b-p)/frac_kappa);
-		if(forRand2<=pow(x_frac,frac_kappa-1.0)){
-		    break;
-		}
-	    }
-	}
-    }
-    amp = THETA*(x_frac+x_int);
- if ( amp > i_max ) {
-     i_max = amp ;
-     
-/*VERBATIM*/
-      /*usleep(1000000);*/
- }
-   if ( i < i_min ) {
-     i_min = amp ;
-     
-/*VERBATIM*/
-      /*	    usleep(1);*/
- }
    if ( t < del + dur  && t >= del ) {
      fcount = fcount + 1.0 ;
      if ( fcount > 50.0 ) {
-       i = amp ;
+       
+/*VERBATIM*/
+	  int_kappa = (int)KAPPA;
+	  frac_kappa = KAPPA - (double)int_kappa;
+	  forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
+	  x_int = 0;
+	  for(roop=0;roop<int_kappa;roop++){
+	      x_int += -log(forRand);
+	  }
+	  if(fabs(frac_kappa)<0.01){ x_frac=0; }
+	  else{
+	      b = (exp(1.0)+frac_kappa)/exp(1.0);
+	      while(1){
+		  forRand = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
+		  p = b*forRand;
+		  forRand2 = ((double)(rand()+1.0))/((double)RAND_MAX+2.0);
+		  if(p<=1.0){
+		      x_frac = pow(p,1.0/frac_kappa);
+		      if(forRand2<=exp(-x_frac)){break;}
+		  }else{
+		      x_frac = -log((b-p)/frac_kappa);
+		      if(forRand2<=pow(x_frac,frac_kappa-1.0)){
+			  break;
+		      }
+		  }
+	      }
+	  }
+	  amp = THETA*(x_frac+x_int);
+ i = amp ;
        fcount = 0.0 ;
        }
-     if ( i > i_max ) {
-       i_max = i ;
-       
-/*VERBATIM*/
-	    usleep(1);
- }
-     if ( i < i_min ) {
-       i_min = i ;
-       
-/*VERBATIM*/
-	    usleep(1);
- }
      }
    else {
      i = 0.0 ;
-     }
-   times = times + 1.0 ;
-   ave_v = ave_v + amp ;
-   
-/*VERBATIM*/
-    t_int = (int)t;
-    t_frac = t - t_int;
-    t_int = (int)(t_int)%10000;
- if (  ! ( t_int )  || t_frac  == 0.0 ) {
      }
    }
  _current += i;
