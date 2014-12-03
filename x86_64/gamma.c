@@ -57,8 +57,11 @@ extern double hoc_Exp(double);
 #define i_min _p[19]
 #define times _p[20]
 #define ave_v _p[21]
-#define i _p[22]
-#define _g _p[23]
+#define t_int _p[22]
+#define t_frac _p[23]
+#define fcount _p[24]
+#define i _p[25]
+#define _g _p[26]
 #define _nd_area  *_ppvar[0]._pval
  
 #if MAC
@@ -172,6 +175,9 @@ static void  nrn_jacob(_NrnThread*, _Memb_list*, int);
  "i_min",
  "times",
  "ave_v",
+ "t_int",
+ "t_frac",
+ "fcount",
  0,
  "i",
  0,
@@ -188,7 +194,7 @@ static void nrn_alloc(Prop* _prop) {
 	_p = nrn_point_prop_->param;
 	_ppvar = nrn_point_prop_->dparam;
  }else{
- 	_p = nrn_prop_data_alloc(_mechtype, 24, _prop);
+ 	_p = nrn_prop_data_alloc(_mechtype, 27, _prop);
  	/*initialize range parameters*/
  	del = 0;
  	dur = 0;
@@ -197,10 +203,10 @@ static void nrn_alloc(Prop* _prop) {
  	forRand = 0.01;
  	forRand2 = 0.01;
  	k = 0;
- 	n = 2.7;
+ 	n = 10;
  	tmp_n = 1;
- 	THETA = 0.017;
- 	KAPPA = 0.16;
+ 	THETA = 0.32;
+ 	KAPPA = 0.1;
  	int_kappa = 1;
  	frac_kappa = 0;
  	b = 1;
@@ -208,13 +214,16 @@ static void nrn_alloc(Prop* _prop) {
  	x_frac = 0;
  	x_int = 1;
  	roop = 0;
- 	i_max = -100;
- 	i_min = 100;
+ 	i_max = 0;
+ 	i_min = 0;
  	times = 0;
  	ave_v = 0;
+ 	t_int = 1;
+ 	t_frac = 0;
+ 	fcount = 0;
   }
  	_prop->param = _p;
- 	_prop->param_size = 24;
+ 	_prop->param_size = 27;
   if (!nrn_point_prop_) {
  	_ppvar = nrn_prop_datum_alloc(_mechtype, 2, _prop);
   }
@@ -261,7 +270,9 @@ static void initmodel() {
 /*VERBATIM*/
     srand((unsigned)time(NULL));
     /*srand(25525);*/
- }
+ i_max = - 100.0 ;
+   i_min = 100.0 ;
+   }
 
 }
 }
@@ -326,8 +337,24 @@ static double _nrn_current(double _v){double _current=0.;v=_v;{ {
 	}
     }
     amp = THETA*(x_frac+x_int);
- if ( t < del + dur  && t >= del ) {
-     i = amp ;
+ if ( amp > i_max ) {
+     i_max = amp ;
+     
+/*VERBATIM*/
+      /*usleep(1000000);*/
+ }
+   if ( i < i_min ) {
+     i_min = amp ;
+     
+/*VERBATIM*/
+      /*	    usleep(1);*/
+ }
+   if ( t < del + dur  && t >= del ) {
+     fcount = fcount + 1.0 ;
+     if ( fcount > 50.0 ) {
+       i = amp ;
+       fcount = 0.0 ;
+       }
      if ( i > i_max ) {
        i_max = i ;
        
@@ -345,7 +372,14 @@ static double _nrn_current(double _v){double _current=0.;v=_v;{ {
      i = 0.0 ;
      }
    times = times + 1.0 ;
-   ave_v = ave_v + v ;
+   ave_v = ave_v + amp ;
+   
+/*VERBATIM*/
+    t_int = (int)t;
+    t_frac = t - t_int;
+    t_int = (int)(t_int)%10000;
+ if (  ! ( t_int )  || t_frac  == 0.0 ) {
+     }
    }
  _current += i;
 

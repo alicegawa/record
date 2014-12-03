@@ -171,7 +171,7 @@ static void nrn_alloc(Prop* _prop) {
  	forRand = 0.01;
  	forRand2 = 0.01;
  	k = 0;
- 	n = 0.26;
+ 	n = 0.27;
  	tmp_n = 1;
   }
  	_prop->param = _p;

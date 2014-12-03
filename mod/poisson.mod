@@ -22,7 +22,7 @@ PARAMETER {
     forRand = 0.01
     forRand2 = 0.01
     k = 0 :counter
-    n = 0.26:2.7 :parameter to adjust
+    n = 0.27:2.7 :parameter to adjust
     tmp_n = 1
 }
 ASSIGNED { i (nA) }

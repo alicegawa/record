@@ -5,6 +5,8 @@ extern int nrn_nobanner_;
 
 extern void _gamma_reg(void);
 extern void _gaussian_reg(void);
+extern void _hh_test_reg(void);
+extern void _pGPeA_reg(void);
 extern void _poisson_reg(void);
 
 void modl_reg(){
@@ -13,10 +15,14 @@ void modl_reg(){
 
     fprintf(stderr," mod/gamma.mod");
     fprintf(stderr," mod/gaussian.mod");
+    fprintf(stderr," mod/hh_test.mod");
+    fprintf(stderr," mod/pGPeA.mod");
     fprintf(stderr," mod/poisson.mod");
     fprintf(stderr, "\n");
   }
   _gamma_reg();
   _gaussian_reg();
+  _hh_test_reg();
+  _pGPeA_reg();
   _poisson_reg();
 }
